@@ -6,7 +6,7 @@ import  { ThemeProvider } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Lumora - The Future of Worl",
+  title: "Lumora - The Future of Work",
   description: "Beautiful, fast, and simple project management",
 };
 

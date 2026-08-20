@@ -8,8 +8,12 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
 
+    const exists = await kv.get(`waitlist_email:${email}`);
+    if (exists) {
+    return NextResponse.json({ error: "Already on the waitlist" }, { status: 409 });
+    }
     const count = await kv.incr("waitlist_count");
-    await kv.set(`waitlist_email_${count}`, email);
+    await kv.set(`waitlist_email:${email}`, count);
 
     return NextResponse.json({ success: true, position: count });
 }

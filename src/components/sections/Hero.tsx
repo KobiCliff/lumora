@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Zap, Shield, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
     return (
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-linear-to-br from-slate-900 via-purple-900 to-slate-900">
-        <div className="absolute inset-0 bg-grid-white/5" />
+        <div className="absolute inset-0 bg-grid-white" />
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -15,7 +15,7 @@ export default function Hero() {
         >
 
           <motion.h1
-          className="text-7x1 md:text-9x1 font-black text-white mb-8"
+          className="text-7xl md:text-9xl font-black text-white mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -23,7 +23,7 @@ export default function Hero() {
            Lumora  
           </motion.h1>
           <motion.p
-            className="text-2x1 md:text-4xl text-white/80 mb-12"
+            className="text-2xl md:text-4xl text-white/80 mb-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -36,10 +36,10 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <a href="/waitlist" className="group px-12 py-6 bg-white text-black font-bold text-x1 rounded-2xl hover:scale-105 transition shadow-2x1 inline-flex items-center gap-3">
-              Join Waitlist <ArrowRight className="group-hover:translate-x-2 tranaition" />
+            <a href="/waitlist" className="group px-12 py-6 bg-white text-black font-bold text-xl rounded-2xl hover:scale-105 transition shadow-2xl inline-flex items-center gap-3">
+              Join Waitlist <ArrowRight className="group-hover:translate-x-2 transition" />
             </a>
-            <a href="#features" className="px-12 py-6 border-2 border-white/50 text-white font-bold text-x1 rounded-2xl hover:bg-white hover:text-black transition">
+            <a href="#features" className="px-12 py-6 border-2 border-white/50 text-white font-bold text-xl rounded-2xl hover:bg-white hover:text-black transition">
               Learn More
             </a>
           </motion.div>

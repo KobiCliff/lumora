@@ -20,7 +20,7 @@ export default function Features() {
               className="text-center"
             >
               <f.icon className="w-16 h-16 mx-auto mb-6 text-purple-400" />
-              <h3 className="text-3x1 font-bold text-white mb-4">{f.title}</h3>
+              <h3 className="text-3xl font-bold text-white mb-4">{f.title}</h3>
               <p className="text-gray-400">{f.desc}</p>
             </motion.div>
           ))}

@@ -17,7 +17,7 @@ export default function BarChart() {
     return(
         <ResponsiveContainer width="100%" height={400}>
             <RechartBar data={data}>
-                <CartesianGrid strokeDasharray="3 3" stroke={theme === "dark" ? "#$374151" : "#e5e7eb"} />
+                <CartesianGrid strokeDasharray="3 3" stroke={theme === "dark" ? "#374151" : "#e5e7eb"} />
                 <XAxis dataKey="name" stroke={theme === "dark" ? "#9ca3af" : "#6b7280"} />
                 <YAxis stroke={theme === "dark" ? "#9ca3af" : "#6b7280"} />
                 <Tooltip contentStyle={{ background: theme === "dark" ? "#1f2937" : "#ffffff", border: "none", borderRadius: "12px" }} />

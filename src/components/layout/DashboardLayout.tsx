@@ -5,7 +5,7 @@ import { Menu, X, Home, BarChart3, Settings, LogOut, Moon, Sun } from "lucide-re
 import { useTheme } from "next-themes";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
 
   return (
@@ -32,7 +32,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${sidebarOpen ? "lg:ml-64" : ""}`}>
+      <div className="transition-all duration-300 lg:ml-64">        
         {/* Topbar */}
         <header className="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden">
