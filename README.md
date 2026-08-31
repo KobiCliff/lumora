@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lumora
 
-## Getting Started
+Booking and appointment software for small service businesses in Nigeria — salons,
+barbershops, clinics, repair shops, tutors. A business signs up, lists its services,
+and gets a public booking page its customers can use without creating an account.
+The business owner sees bookings, revenue and no-shows on a dashboard.
 
-First, run the development server:
+The problem it replaces: taking appointments over WhatsApp and Instagram DMs, with
+no deposit, no reminders and no record of what was booked.
+
+## Status
+
+Early build. Working today:
+
+- Marketing landing page and email waitlist (stored in Vercel KV)
+- Dashboard shell — bookings, analytics and settings pages, currently on hardcoded
+  sample data
+- A placeholder sign-in gate on `/dashboard/*` (see [Auth](#auth) — this is not
+  real authentication yet)
+
+Not built yet: the data model (businesses, services, bookings), the public booking
+page, and Paystack payments.
+
+## Stack
+
+| | |
+|---|---|
+| Framework | Next.js 16 (App Router, React 19, React Compiler) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 — configured in CSS, no `tailwind.config.ts` |
+| UI | Radix primitives, `class-variance-authority`, `lucide-react` |
+| Animation | Framer Motion, via shared tokens in `src/lib/motion.ts` |
+| Charts | Recharts |
+| Data | Vercel KV (Redis) |
+| Payments | Paystack (not wired up yet) |
+
+## Running locally
+
+Requires Node 20+.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local`. Vercel KV backs the waitlist and sessions and, soon, all app
+data — without these two variables the landing page renders, but signing up for the
+waitlist and signing in both fail.
 
-## Learn More
+```bash
+KV_REST_API_URL=
+KV_REST_API_TOKEN=
+```
 
-To learn more about Next.js, take a look at the following resources:
+Both come from the Vercel dashboard: **Storage → your KV store → `.env.local` tab**.
+If the project is linked with the Vercel CLI, `vercel env pull .env.local` fetches
+them for you.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+  app/
+    page.tsx            landing page
+    waitlist/           waitlist signup
+    login/              placeholder sign-in
+    dashboard/          business-facing app (gated)
+    api/
+      waitlist/         waitlist signup handler
+      session/          issues and clears the session cookie
+  components/
+    sections/           landing page sections
+    dashboard/          PageShell, PanelCard, StatCard, EmptyState
+    layout/             dashboard chrome
+    ui/                 shared primitives
+    charts/
+  lib/
+    motion.ts           shared Framer Motion variants
+    session.ts          session cookie + KV session store
+  proxy.ts              route gate on /dashboard/*
+```
 
-## Deploy on Vercel
+Two things that look like mistakes but aren't:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **`src/proxy.ts`, not `middleware.ts`** — Next 16 renamed the file convention.
+  Same runtime behaviour and same `config.matcher`.
+- **No `tailwind.config.ts`** — Tailwind v4 takes its configuration from
+  `@theme` in `src/app/globals.css`. Design tokens (colours, type scale, radii,
+  shadows) live there.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Auth
+
+`/dashboard/*` is gated by `src/proxy.ts`, which resolves a session cookie against
+KV and redirects to `/login` when there isn't one. **This is a gate, not
+authentication:** `/api/session` hands a session to anyone who posts a
+syntactically valid email address, so it keeps the dashboard from being casually
+public and nothing more.
+
+It is not, however, forgeable. The cookie holds an opaque 256-bit random id and the
+email lives in KV under `session:<id>`, so sessions can only be created by going
+through `/api/session`, and logout deletes the server-side record.
+
+Magic-link sign-in will replace only the step that decides *whether* to issue a
+session — the cookie, the KV record and the code that reads them are meant to stay.
+
+## Scripts
+
+| | |
+|---|---|
+| `npm run dev` | Dev server |
+| `npm run build` | Production build |
+| `npm start` | Serve a production build |
+| `npm run lint` | ESLint |

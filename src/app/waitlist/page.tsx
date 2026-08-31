@@ -1,60 +1,114 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useState } from "react";
 import Confetti from "react-confetti";
+import { Button } from "@/components/ui/button";
+import { fadeInSlow, fadeUpSlow, staggerMarketing } from "@/lib/motion";
 
 export default function WaitlistPage() {
-    const [email, setEmail] = useState("");
-    const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (e:React.FormEvent) => {
-        e.preventDefault();
-        setStatus("loading");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setError(null);
 
-        await fetch("/api/waitlist", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email }),
-        });
+    const response = await fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
 
-        setStatus("success");
-    };
+    // The API rejects duplicates with a 409; without this the form threw
+    // confetti at people it had just turned away.
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      setError(data?.error ?? "Something went wrong. Try again.");
+      setStatus("idle");
+      return;
+    }
 
-    return (
-        <>
-            {status === "success" && <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} />}
-            <section className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-900 via-black to-blue-900">
-                <div className="text-center px-6 max-w-2xl">
-                    <h1 className="text-6xl md:text-8xl font-black text-white mb-8">Lumora</h1>
-                    <p className="text-2xl md:text-4xl text-white/90 mb-12">Launching Q1 2026</p>
+    setStatus("success");
+  };
 
-                    {status !== "success" ? (
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <input 
-                                type="email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full max-w-md mx-auto px-8 py-5 text-xl rounded-2xl bg-white/10 backdrop-blur border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-white"
-                                placeholder="you@company.com" 
-                            />
-                            <button
-                                type="submit"
-                                disabled={status === "loading"}
-                                className="w-full max-w-md mx-auto block px-12 py-6 bg-white text-black font-bold text-xl rounded-2xl hover:scale-105 transition shadow-2xl"
-                            >
-                                {status === "loading" ? "Joining..." : "Get Early Access"}
-                            </button>
-                        </form>
-                    ) : (
-                        <div className="text-4xl font-bold text-white">
-                            You&apos;re in! Check your email soon
-                        </div>
-                    )}
+  return (
+    <>
+      {status === "success" && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+        />
+      )}
+      <section className="flex min-h-screen items-center justify-center bg-linear-to-br from-lumora-900 via-ink-950 to-ink-900">
+        <motion.div
+          variants={staggerMarketing}
+          initial="hidden"
+          animate="show"
+          className="max-w-2xl px-6 text-center"
+        >
+          <motion.h1
+            variants={fadeUpSlow}
+            className="mb-8 text-display text-white"
+          >
+            Lumora
+          </motion.h1>
+          <motion.p
+            variants={fadeInSlow}
+            className="mb-12 text-lead text-white/90"
+          >
+            Launching Q1 2026
+          </motion.p>
 
-                    <p className="mt-12 text-white/60">Be the first to try Lumora before anyone else</p>
-                </div>
-            </section>
-        </>
-    )
+          {status !== "success" ? (
+            <motion.form
+              variants={fadeUpSlow}
+              onSubmit={handleSubmit}
+              className="space-y-6"
+            >
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-invalid={error ? true : undefined}
+                className="mx-auto w-full max-w-md rounded-control border border-white/20 bg-white/10 px-8 py-5 text-xl text-white placeholder-white/40 backdrop-blur focus:border-white focus:outline-none"
+                placeholder="you@yourbusiness.com"
+              />
+
+              {error ? (
+                <p role="alert" className="font-semibold text-danger">
+                  {error}
+                </p>
+              ) : null}
+
+              <Button
+                type="submit"
+                variant="invert"
+                size="xl"
+                disabled={status === "loading"}
+                className="mx-auto w-full max-w-md"
+              >
+                {status === "loading" ? "Joining..." : "Get Early Access"}
+              </Button>
+            </motion.form>
+          ) : (
+            <motion.div
+              variants={fadeUpSlow}
+              className="text-section text-white"
+            >
+              You&apos;re in! Check your email soon
+            </motion.div>
+          )}
+
+          <motion.p variants={fadeInSlow} className="mt-12 text-white/60">
+            Be the first to try Lumora before anyone else
+          </motion.p>
+        </motion.div>
+      </section>
+    </>
+  );
 }
