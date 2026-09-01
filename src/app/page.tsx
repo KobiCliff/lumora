@@ -1,12 +1,23 @@
-import Hero from "@/components/sections/Hero";   // ← we’ll create this in 10 seconds
+import Nav from "@/components/sections/Nav";
+import Hero from "@/components/sections/Hero";
+import ProblemSolution from "@/components/sections/ProblemSolution";
+import HowItWorks from "@/components/sections/HowItWorks";
+import WhoItsFor from "@/components/sections/WhoItsFor";
 import Features from "@/components/sections/Features";
+import FAQ from "@/components/sections/FAQ";
+import FinalCta from "@/components/sections/FinalCta";
 
 export default function HomePage() {
   return (
     <>
+      <Nav />
       <Hero />
+      <ProblemSolution />
+      <HowItWorks />
+      <WhoItsFor />
       <Features />
-      {/* Dashboard is now at /dashboard — we’ll link to it from the hero */}
+      <FAQ />
+      <FinalCta />
     </>
   );
 }

@@ -13,13 +13,17 @@ no deposit, no reminders and no record of what was booked.
 Early build. Working today:
 
 - Marketing landing page and email waitlist (stored in Vercel KV)
-- Dashboard shell — bookings, analytics and settings pages, currently on hardcoded
-  sample data
+- The data model — businesses, services and bookings (`src/lib/types.ts`)
+- Business and service management from the dashboard — opening hours, slot size,
+  services with duration, price and deposit
+- The public booking page at `/b/<slug>` — customers see real availability and
+  book without creating an account
+- Dashboard — bookings, analytics and settings pages, running on live data
 - A placeholder sign-in gate on `/dashboard/*` (see [Auth](#auth) — this is not
   real authentication yet)
 
-Not built yet: the data model (businesses, services, bookings), the public booking
-page, and Paystack payments.
+Not built yet: real email-based authentication, Paystack payments, and
+subscription billing.
 
 ## Stack
 
@@ -47,9 +51,9 @@ Then open http://localhost:3000.
 
 ### Environment
 
-Create `.env.local`. Vercel KV backs the waitlist and sessions and, soon, all app
-data — without these two variables the landing page renders, but signing up for the
-waitlist and signing in both fail.
+Create `.env.local`. Vercel KV backs everything — the waitlist, sessions,
+businesses, services and bookings — so without these two variables the landing
+page renders, but the waitlist, sign-in, booking page and dashboard all fail.
 
 ```bash
 KV_REST_API_URL=
@@ -68,19 +72,30 @@ src/
     page.tsx            landing page
     waitlist/           waitlist signup
     login/              placeholder sign-in
+    b/[slug]/           public booking page
     dashboard/          business-facing app (gated)
     api/
       waitlist/         waitlist signup handler
       session/          issues and clears the session cookie
+      business/         business create/update
+      services/         service create/update/delete
+      bookings/         booking status changes
+      public/           availability + bookings for /b/*
   components/
     sections/           landing page sections
-    dashboard/          PageShell, PanelCard, StatCard, EmptyState
+    booking/            the public booking flow
+    dashboard/          PageShell, PanelCard, StatCard, ServicesManager, ...
     layout/             dashboard chrome
     ui/                 shared primitives
     charts/
   lib/
-    motion.ts           shared Framer Motion variants
+    types.ts            the domain model
+    business.ts         business + service storage and validation
+    bookings.ts         booking storage, status changes, stats
+    availability.ts     slot grid — candidates, reserve, release
+    kv-keys.ts          KV key layout
     session.ts          session cookie + KV session store
+    motion.ts           shared Framer Motion variants
   proxy.ts              route gate on /dashboard/*
 ```
 

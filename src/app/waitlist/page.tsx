@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Confetti from "react-confetti";
 import { Button } from "@/components/ui/button";
+// import Nav from "@/components/sections/Nav";
 import { fadeInSlow, fadeUpSlow, staggerMarketing } from "@/lib/motion";
 
 export default function WaitlistPage() {
@@ -36,13 +37,14 @@ export default function WaitlistPage() {
 
   return (
     <>
+      {/* <Nav />
       {status === "success" && (
         <Confetti
           width={window.innerWidth}
           height={window.innerHeight}
           recycle={false}
         />
-      )}
+      )} */}
       <section className="flex min-h-screen items-center justify-center bg-linear-to-br from-lumora-900 via-ink-950 to-ink-900">
         <motion.div
           variants={staggerMarketing}
@@ -54,13 +56,13 @@ export default function WaitlistPage() {
             variants={fadeUpSlow}
             className="mb-8 text-display text-white"
           >
-            Lumora
+            LUMORA
           </motion.h1>
           <motion.p
             variants={fadeInSlow}
             className="mb-12 text-lead text-white/90"
           >
-            Launching Q1 2026
+            Coming Soon
           </motion.p>
 
           {status !== "success" ? (
@@ -100,12 +102,12 @@ export default function WaitlistPage() {
               variants={fadeUpSlow}
               className="text-section text-white"
             >
-              You&apos;re in! Check your email soon
+              Coming Soon
             </motion.div>
           )}
 
           <motion.p variants={fadeInSlow} className="mt-12 text-white/60">
-            Be the first to try Lumora before anyone else
+            Founding businesses get first pick of booking links.
           </motion.p>
         </motion.div>
       </section>
