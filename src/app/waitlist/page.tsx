@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Confetti from "react-confetti";
 import { Button } from "@/components/ui/button";
-// import Nav from "@/components/sections/Nav";
 import { fadeInSlow, fadeUpSlow, staggerMarketing } from "@/lib/motion";
 
 export default function WaitlistPage() {
@@ -37,14 +36,13 @@ export default function WaitlistPage() {
 
   return (
     <>
-      {/* <Nav />
       {status === "success" && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          recycle={false}
-        />
-      )} */}
+      <Confetti
+        width={window.innerWidth}
+        height={window.innerHeight}
+        recycle={false}
+      />
+      )}
       <section className="flex min-h-screen items-center justify-center bg-linear-to-br from-lumora-900 via-ink-950 to-ink-900">
         <motion.div
           variants={staggerMarketing}
@@ -102,7 +100,7 @@ export default function WaitlistPage() {
               variants={fadeUpSlow}
               className="text-section text-white"
             >
-              Coming Soon
+              You&apos;re in! Check your email soon
             </motion.div>
           )}
 

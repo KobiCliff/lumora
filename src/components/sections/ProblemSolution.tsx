@@ -12,10 +12,10 @@ import {
 import { fadeUpSlow, staggerMarketing } from "@/lib/motion";
 
 const DM_BUBBLES = [
-  { from: "client" as const, text: "Yoo, you dey today?" },
-  { from: "owner" as const, text: "Yes. Which time you wan come?" },
-  { from: "client" as const, text: "5 o'clock. How much for the style?" },
-  { from: "owner" as const, text: "₦8,000. I go keep the slot for you." },
+  { from: "client" as const, text: "Hey, are you in today?" },
+  { from: "owner" as const, text: "Yes, I am. What time do you want to come?" },
+  { from: "client" as const, text: "5:00 PM. How much for the style?" },
+  { from: "owner" as const, text: "₦8,000. I'll keep a slot for you." },
   { from: "client" as const, text: "Okay, I'll come 🙏" },
 ];
 
